@@ -22,8 +22,8 @@
     <div class="wl-cards">
       <CommentCard
         v-for="comment in data"
-        :key="comment.objectId"
-        :root-id="comment.objectId"
+        :key="comment.id"
+        :root-id="comment.id"
         :comment="comment"
         :reply="reply"
         :edit="edit"
@@ -327,12 +327,13 @@ export default defineComponent({
     };
 
     const onSubmit = (comment: WalineComment): void => {
+      console.log(comment);
       if (edit.value) {
         edit.value.comment = comment.comment;
         edit.value.orig = comment.orig;
       } else if (comment.rid) {
         const repliedComment = data.value.find(
-          ({ objectId }) => objectId === comment.rid
+          ({ id }) => id === comment.rid
         );
 
         if (!repliedComment) return;
@@ -353,13 +354,11 @@ export default defineComponent({
     }): Promise<void> => {
       if (comment.status === status) return;
 
-      const { serverURL, lang } = config.value;
+      const { serverURL } = config.value;
 
       await updateComment({
         serverURL,
-        lang,
-        token: userInfo.value?.token,
-        objectId: comment.objectId,
+        id: comment.id,
         status,
       });
 
@@ -369,41 +368,37 @@ export default defineComponent({
     const onSticky = async (comment: WalineComment): Promise<void> => {
       if (comment.rid) return;
 
-      const { serverURL, lang } = config.value;
+      const { serverURL } = config.value;
 
       await updateComment({
         serverURL,
-        lang,
-        token: userInfo.value?.token,
-        objectId: comment.objectId,
+        id: comment.id,
         sticky: comment.sticky ? 0 : 1,
       });
 
       comment.sticky = !comment.sticky;
     };
 
-    const onDelete = async ({ objectId }: WalineComment): Promise<void> => {
+    const onDelete = async ({ id }: WalineComment): Promise<void> => {
       if (!confirm('Are you sure you want to delete this comment?')) return;
 
-      const { serverURL, lang } = config.value;
+      const { serverURL } = config.value;
 
       await deleteComment({
         serverURL,
-        lang,
-        token: userInfo.value?.token,
-        objectId: objectId,
+        id: id,
       });
 
       // delete comment from data
       data.value.some((item, index) => {
-        if (item.objectId === objectId) {
+        if (item.id === id) {
           data.value = data.value.filter((_item, i) => i !== index);
 
           return true;
         }
 
         return item.children.some((child, childIndex) => {
-          if (child.objectId === objectId) {
+          if (child.id === id) {
             data.value[index].children = item.children.filter(
               (_item, i) => i !== childIndex
             );
@@ -417,21 +412,20 @@ export default defineComponent({
     };
 
     const onLike = async (comment: WalineComment): Promise<void> => {
-      const { serverURL, lang } = config.value;
-      const { objectId } = comment;
-      const hasLiked = likeStorage.value.includes(objectId);
+      const { serverURL } = config.value;
+      const { id } = comment;
+      const hasLiked = likeStorage.value.includes(id);
 
       await likeComment({
         serverURL,
-        lang,
-        objectId,
+        id,
         like: !hasLiked,
       });
 
       if (hasLiked)
-        likeStorage.value = likeStorage.value.filter((id) => id !== objectId);
+        likeStorage.value = likeStorage.value.filter((id) => id !== id);
       else {
-        likeStorage.value = [...likeStorage.value, objectId];
+        likeStorage.value = [...likeStorage.value, id];
 
         if (likeStorage.value.length > 50)
           likeStorage.value = likeStorage.value.slice(-50);

@@ -32,10 +32,9 @@ export interface GetUserListResponse {
 export const getUserList = ({
   serverURL,
   signal,
-  pageSize,
-  lang,
+  pageSize
 }: GetUserListOptions): Promise<WalineUser[]> =>
-  fetch(`${serverURL}/user?pageSize=${pageSize}&lang=${lang}`, {
+  fetch(`${serverURL}/user?size=${pageSize}`, {
     signal,
   })
     .then((resp) => <Promise<GetUserListResponse>>resp.json())

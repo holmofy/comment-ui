@@ -5,13 +5,6 @@ export interface BaseAPIOptions {
    * Waline serverURL
    */
   serverURL: string;
-
-  /**
-   * 错误信息所使用的语言
-   *
-   * Language used in error text
-   */
-  lang: string;
 }
 
 export interface APIErrorResponse {

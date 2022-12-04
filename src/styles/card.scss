@@ -25,7 +25,7 @@
       --avatar-size: var(--waline-m-avatar-size);
     }
 
-    img,svg {
+    img {
       width: var(--avatar-size);
       height: var(--avatar-size);
       border-radius: var(--waline-avatar-radius);

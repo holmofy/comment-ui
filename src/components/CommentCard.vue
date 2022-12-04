@@ -1,5 +1,5 @@
 <template>
-  <div :id="comment.objectId" class="wl-item">
+  <div :id="comment.id" class="wl-item">
     <div class="wl-user" aria-hidden="true">
       <img v-if="comment.avatar" :src="comment.avatar" />
       <VerifiedIcon v-if="comment.type" />
@@ -125,7 +125,7 @@
       >
         <CommentBox
           :edit="edit"
-          :reply-id="reply?.objectId"
+          :reply-id="reply?.id"
           :reply-user="comment.nick"
           :root-id="rootId"
           @submit="$emit('submit', $event)"
@@ -136,7 +136,7 @@
       <div v-if="comment.children" class="wl-quote">
         <CommentCard
           v-for="child in comment.children"
-          :key="child.objectId"
+          :key="child.id"
           :comment="child"
           :reply="reply"
           :edit="edit"
@@ -219,7 +219,7 @@ export default defineComponent({
       return link ? (isLinkHttp(link) ? link : `https://${link}`) : '';
     });
 
-    const like = computed(() => likes.value.includes(props.comment.objectId));
+    const like = computed(() => likes.value.includes(props.comment.id));
 
     const time = useTimeAgo(props.comment.insertedAt, locale.value);
 
@@ -228,15 +228,15 @@ export default defineComponent({
     const isOwner = computed(
       () =>
         props.comment.user_id &&
-        userInfo.value.objectId === props.comment.user_id
+        userInfo.value.id === props.comment.user_id
     );
 
     const isReplyingCurrent = computed(
-      () => props.comment.objectId === props.reply?.objectId
+      () => props.comment.id === props.reply?.id
     );
 
     const isEditingCurrent = computed(
-      () => props.comment.objectId === props.edit?.objectId
+      () => props.comment.id === props.edit?.id
     );
 
     return {

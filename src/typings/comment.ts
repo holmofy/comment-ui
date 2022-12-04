@@ -68,7 +68,7 @@ export interface WalineComment extends Exclude<WalineCommentData, 'ua'> {
    */
   type?: 'administrator' | 'guest' | `verify:${string}`;
 
-  objectId: string;
+  id: string;
 
   /**
    * Time ISOString when the comment is created

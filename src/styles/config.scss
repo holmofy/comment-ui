@@ -13,8 +13,8 @@
 
   // layout colors
   --waline-color: #444;
-  --waline-bgcolor: #fff;
-  --waline-bgcolor-light: #f8f8f8;
+  --waline-bgcolor: transparent;
+  --waline-bgcolor-light: rgba(255, 255, 255, .99);
   --waline-bgcolor-hover: #f0f0f0;
   --waline-border-color: #ddd;
   --waline-disable-bgcolor: #f8f8f8;

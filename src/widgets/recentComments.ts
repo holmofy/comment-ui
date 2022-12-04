@@ -65,9 +65,7 @@ export const RecentComments = ({
   return getRecentComment({
     serverURL,
     count,
-    lang,
     signal: controller.signal,
-    token: userInfo.value?.token,
   }).then((comments) => {
     if (root && comments.length) {
       root.innerHTML = `<ul class="wl-recent-list">${comments

@@ -22,7 +22,7 @@ export interface GetCommentOptions extends BaseAPIOptions {
    *
    * Comment number per page
    */
-   pageSize: number;
+  pageSize: number;
 
   /**
    * 排序方式
@@ -41,7 +41,6 @@ export interface GetCommentOptions extends BaseAPIOptions {
 
 export const getComment = ({
   serverURL,
-  lang,
   path,
   page,
   pageSize,
@@ -83,7 +82,6 @@ export interface AddCommentResponse {
 
 export const addComment = ({
   serverURL,
-  lang,
   comment,
 }: AddCommentOptions): Promise<AddCommentResponse> => {
   const headers: Record<string, string> = {
@@ -102,17 +100,14 @@ export const addComment = ({
 };
 
 export interface DeleteCommentOptions extends BaseAPIOptions {
-  token: string;
-  objectId: string | number;
+  id: string | number;
 }
 
 export const deleteComment = ({
   serverURL,
-  lang,
-  token,
-  objectId,
+  id,
 }: DeleteCommentOptions): Promise<void> =>
-  fetch(`${serverURL}/comment/${objectId}`, {
+  fetch(`${serverURL}/comment/${id}`, {
     method: 'DELETE',
   }).then((resp) => <Promise<void>>resp.json());
 
@@ -122,7 +117,7 @@ export interface LikeCommentOptions extends BaseAPIOptions {
    *
    * Comment ID
    */
-  objectId: number | string;
+  id: number | string;
 
   /**
    * 点赞还是取消点赞
@@ -134,30 +129,23 @@ export interface LikeCommentOptions extends BaseAPIOptions {
 
 export const likeComment = ({
   serverURL,
-  lang,
-  objectId,
+  id,
   like,
 }: LikeCommentOptions): Promise<void> =>
-  fetch(`${serverURL}/comment/${objectId}`, {
+  fetch(`${serverURL}/comment/${id}`, {
     method: 'PUT',
     headers: JSON_HEADERS,
     body: JSON.stringify({ like }),
   }).then((resp) => <Promise<void>>resp.json());
 
 export interface UpdateCommentOptions extends BaseAPIOptions {
-  /**
-   * 用户令牌
-   *
-   * User token
-   */
-  token: string;
 
   /**
    * 评论的 ID
    *
    * Comment ID
    */
-  objectId: number | string;
+  id: number | string;
 
   /**
    * 评论的状态
@@ -178,12 +166,10 @@ export interface UpdateCommentOptions extends BaseAPIOptions {
 
 export const updateComment = ({
   serverURL,
-  lang,
-  token,
-  objectId,
+  id,
   ...data
 }: UpdateCommentOptions): Promise<void> =>
-  fetch(`${serverURL}/comment/${objectId}`, {
+  fetch(`${serverURL}/comment/${id}`, {
     method: 'PUT',
     headers: {
       ...JSON_HEADERS,

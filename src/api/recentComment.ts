@@ -27,17 +27,11 @@ export interface GetRecentCommentOptions extends BaseAPIOptions {
 
 export const getRecentComment = ({
   serverURL,
-  lang,
-  count,
-  signal,
-  token,
+  count
 }: GetRecentCommentOptions): Promise<WalineComment[]> => {
   const headers: Record<string, string> = {};
 
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  return fetch(`${serverURL}/comment?type=recent&count=${count}&lang=${lang}`, {
-    signal,
+  return fetch(`${serverURL}/comment/recent?count=${count}`, {
     headers,
   })
     .then((resp) => <Promise<WalineComment[]>>resp.json())

@@ -1,7 +1,7 @@
 <template>
   <div class="wl-comment">
     <div
-      v-if="config.login !== 'disable' && isLogin && !edit?.objectId"
+      v-if="config.login !== 'disable' && isLogin && !edit?.id"
       class="wl-login-info"
     >
       <div class="wl-avatar">
@@ -251,7 +251,7 @@
     </div>
 
     <button
-      v-if="replyId || edit?.objectId"
+      v-if="replyId || edit?.id"
       class="wl-close"
       :title="locale.cancelReply"
       @click="$emit(replyId ? 'cancel-reply' : 'cancel-edit')"
@@ -527,7 +527,7 @@ export default defineComponent({
         comment.rid = props.rootId;
         comment.at = props.replyUser;
       } else if (props.edit) {
-        comment.eid = props.edit.objectId;
+        comment.eid = props.edit.id;
       }
 
       isSubmitting.value = true;
@@ -542,14 +542,14 @@ export default defineComponent({
 
           if (resp.errmsg) return alert(resp.errmsg);
 
-          emit('submit', resp.data!);
+          emit('submit', resp);
 
           editor.value = '';
 
           previewText.value = '';
 
           if (props.replyId) emit('cancel-reply');
-          if (props.edit?.objectId) emit('cancel-edit');
+          if (props.edit?.id) emit('cancel-edit');
         })
         .catch((err: TypeError) => {
           isSubmitting.value = false;
@@ -560,18 +560,7 @@ export default defineComponent({
 
     const onLogin = (event: Event): void => {
       event.preventDefault();
-      const { lang, serverURL } = config.value;
-
-      login({
-        serverURL,
-        lang,
-      }).then((data) => {
-        userInfo.value = data;
-        (data.remember ? localStorage : sessionStorage).setItem(
-          'WALINE_USER',
-          JSON.stringify(data)
-        );
-      });
+      
     };
 
     const onLogout = (): void => {
@@ -704,7 +693,7 @@ export default defineComponent({
     onMounted(() => {
       document.body.addEventListener('click', popupHandler);
       window.addEventListener('message', onMessageRecive);
-      if (props.edit?.objectId) {
+      if (props.edit?.id) {
         editor.value = props.edit.orig;
       }
 
