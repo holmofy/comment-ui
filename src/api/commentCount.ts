@@ -19,15 +19,12 @@ export interface GetCommentCountOptions extends BaseAPIOptions {
 
 export const fetchCommentCount = ({
   serverURL,
-  lang,
   paths,
-  signal,
 }: GetCommentCountOptions): Promise<number[]> =>
   fetch(
     `${serverURL}/comment/count?url=${encodeURIComponent(
       paths.join(',')
-    )}`,
-    { signal }
+    )}`
   )
     .then((resp) => <Promise<number | number[]>>resp.json())
     .then((data) => errorCheck(data, 'comment count'))

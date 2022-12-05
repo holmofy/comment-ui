@@ -92,7 +92,7 @@ export const addComment = ({
   return fetch(
     `${serverURL}/comment${comment.eid ? `/${comment.eid}` : ''}`,
     {
-      method: 'PUT',
+      method: 'POST',
       headers,
       body: JSON.stringify(comment),
     }

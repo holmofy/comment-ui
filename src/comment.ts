@@ -42,7 +42,6 @@ export const commentCount = ({
   serverURL,
   path = window.location.pathname,
   selector = '.waline-comment-count',
-  lang = 'zh-CN',
 }: // eslint-disable-next-line @typescript-eslint/no-explicit-any
 WalineCommentCountOptions): WalineAbort => {
   const controller = new AbortController();
@@ -56,10 +55,8 @@ WalineCommentCountOptions): WalineAbort => {
       paths: Array.from(elements).map((element) =>
         decodePath(element.dataset.path || element.getAttribute('id') || path)
       ),
-      lang,
       signal: controller.signal,
-    })
-      .then((counts) => {
+    }).then((counts) => {
         elements.forEach((element, index) => {
           element.innerText = counts[index].toString();
         });
